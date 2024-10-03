@@ -1,0 +1,95 @@
+#include <bits/stdc++.h>
+#define ll long long
+#define IOS ios_base::sync_with_stdio(NULL);cin.tie(0);cout.tie(0);
+#define pb push_back
+#define all(a) a.begin(), a.end()
+#define rall(a) a.rbegin(), a.rend()
+#define ss second
+#define ff first
+#define pii pair<int,int>
+#define pll pair<ll,ll>
+#include <iostream>
+#include <string>
+using namespace std;
+ll t,m,n,q,k;
+const ll mod = 1000000007;
+const ll MOD=998244353;
+const ll INF=1e18;
+const int INFINT=1e9;
+const int N = 1e5+7;
+vector <pii> adj[N];
+int dx[]={0,0,1,-1};
+int dy[]={1,-1,0,0};
+string ds="RLDU";
+int main()
+{
+    IOS
+//    freopen("input.txt","r",stdin);
+//    freopen("output.txt","w",stdout);
+//    freopen("error.txt","w",stderr);
+
+        t=1;
+///cin>>t;
+auto inside=[&](int i,int j)
+{
+    return i>=0 && i<n && j>=0 && j<m;
+};
+    while(t--)
+    {
+     cin>>n>>m;
+vector<string> vec(n);
+for(auto &s:vec)
+    cin>>s;
+int x1,x2,y1,y2;
+for(int i=0;i<n;i++)
+{
+    for(int j=0;j<m;j++)
+    {
+        if(vec[i][j]=='A')
+            x1=i,y1=j;
+        if(vec[i][j]=='B')
+            x2=i,y2=j;
+    }
+}
+vector <vector <int>> dis(n,vector<int> (m,-1));
+vector<vector<int>> parent(n,vector<int>(m));
+queue<pii> q;
+q.push({x1,y1});
+dis[x1][y1]=0;
+while(q.size())
+{
+    auto [x,y]=q.front();
+    q.pop();
+    for(int k=0;k<4;k++)
+    {
+        int nx=x+dx[k];
+        int ny=y+dy[k];
+        if(inside(nx,ny) && dis[nx][ny]==-1 && vec[nx][ny]!='#')
+        {
+            dis[nx][ny]=1+dis[x][y];
+            parent[nx][ny]=k;
+            q.push({nx,ny});
+        }
+    }
+}
+if(dis[x2][y2]==-1)
+{
+    cout<<"NO\n";
+    continue;
+}
+int x=x2,y=y2;
+string path;
+while(x!=x1 || y!=y1)
+{
+    int k=parent[x][y];
+    x-=dx[k];
+    y-=dy[k];
+    path+=ds[k];
+}
+reverse(path.begin(),path.end());
+cout<<"YES\n";
+cout<<path.size()<<"\n";
+cout<<path<<"\n";
+    }
+    return 0;
+}
